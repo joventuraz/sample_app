@@ -5,10 +5,10 @@
 #   gem 'sqlite3'
 development:
   adapter: postgresql
-  encoding: UTF-8
+  encoding: unicode
   database: sample_app_development
   pool: 5
-  username: postgres
+  username: jose
   password: javz210688 
 
 # Warning: The database defined as "test" will be erased and
@@ -22,8 +22,8 @@ test:
 
 production:
   adapter: postgresql
-  encoding: UTF-8
+  encoding: unicode
   database: sample_app_development
   pool: 5
-  username: postgres
+  username: jose
   password: javz210688 
