@@ -1,16 +1,29 @@
 class UsersController < ApplicationController
-  before_filter :authenticate, :only => [:index, :edit, :update]
-  before_filter :correct_user, :only => [:edit, :update]
-  before_filter :admin_user,   :only => :destroy
+  before_filter :authenticate,   :only => [:index, :edit, :update]
+  before_filter :correct_user,   :only => [:edit, :update]
+  before_filter :admin_user,     :only => :destroy
+  before_filter :signed_in_user, :only => [:new, :create]
 
 	def show
 		@user = User.find(params[:id])
 		@title = @user.name
 	end
 
-  def new
-		@user = User.new
-		@title = "Sign up"
+  def signed_in_user
+    if signed_in?
+      flash[:info] = "You're already logged in ..."
+      redirect_to root_path
+    end
+  end
+
+  def new  
+	  #unless signed_in?
+	    @user  = User.new
+	    @title = "Sign up"
+	  #else
+	  #  flash[:info] = "You're already logged in."
+	  #  redirect_to root_path
+    #end
   end
 
 	def create
@@ -48,8 +61,13 @@ class UsersController < ApplicationController
 	end
 	
 	def destroy
-	  User.find(params[:id]).destroy
-	  flash[:success] = "User destroyed."
+	  user = User.find(params[:id])
+	  if current_user?(user)
+	    flash[:error] = "Can't delete yourself."
+	  else  
+	    user.destroy
+	    flash[:success] = "User removed."
+    end
 	  redirect_to users_path
   end
 	
