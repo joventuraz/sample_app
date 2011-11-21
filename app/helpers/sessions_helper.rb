@@ -41,6 +41,15 @@ module SessionsHelper
     redirect_to(session[:return_to] || default)
     clear_return_to
   end
+  
+  def authenticate
+    deny_access unless signed_in?
+  end
+  
+  def deny_access
+    store_location
+    redirect_to signin_path, :notice => "Please sign in to acess this page."
+  end
 
 	private
 		#Comment out to use session
